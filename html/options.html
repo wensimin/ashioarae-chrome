@@ -1,0 +1,33 @@
+<!doctype html>
+<!--
+ This page is shown when the extension button is clicked, because the
+ "browser_action" field in manifest.json contains the "default_popup" key with
+ value "popup.html".
+ -->
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <title>用户配置</title>
+  <style type="text/css">
+    body {
+      margin: 10px;
+    }
+
+    h1 {
+      font-size: 15px;
+    }
+
+  </style>
+
+  <script src="../js/jquery3.5.1.js"></script>
+  <script src="../js/config.js"></script>
+  <script src="../js/auth.js"></script>
+</head>
+
+<body>
+<H1>认证信息配置</H1>
+<label>用户名</label><input id="username"/><br/>
+<label>密码</label><input id="password" type="password"/><br/>
+<button id="auth">认证</button>
+</body>
+</html>
