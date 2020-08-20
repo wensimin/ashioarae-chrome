@@ -17,6 +17,11 @@
         font-size: 15px;
       }
 
+      img {
+        width: 100px;
+        height: 100px;
+      }
+
       #container {
         align-items: center;
         display: flex;
@@ -31,15 +36,29 @@
       - [1]: https://developer.chrome.com/extensions/contentSecurityPolicy
     -->
     <script src="../js/jquery3.5.1.js"></script>
+    <script src="../js/config.js"></script>
     <script src="../js/popup.js"></script>
   </head>
 
   <body>
   <h1>同步器</h1>
-  <table id="container">
-    <tr>
-      <button id="test">test</button>
-    </tr>
-  </table>
+  <div id="ashiData">
+    <label class="nickLabel">预改动昵称:</label> <input class="nickValue"/>
+    <label>预改动头像</label>
+    <img class="headImage" src=""/>
+    <input hidden class="imageFile" type="file"/>
+    <button id="update">进行同步</button>
+  </div>
+  <br/>
+  <div id="container">
+    <div id="ashiItem" hidden>
+      <label class="type">bilibili:</label>
+      <label class="nickLabel">当前昵称:</label> <input class="nickValue"/>
+      <label>当前头像</label>
+      <img class="headImage" src=""/>
+      <br/>
+    </div>
+  </div>
+
   </body>
 </html>
