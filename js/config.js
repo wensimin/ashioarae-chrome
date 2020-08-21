@@ -8,11 +8,11 @@ getConfig().then(config => {
         },
         contentType: 'application/json; charset=utf-8',
         error: function (result) {
+            //TODO 错误提示不能使用alert
             if (result.status === 401) {
-                alert("认证失败,检查用户名和密码");
+                $("#message").html("认证失败,检查用户名和密码");
             } else {
-                console.log(result);
-                alert("未知错误");
+                $("#message").html("未知错误");
             }
         }
     });

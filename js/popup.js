@@ -1,5 +1,8 @@
 $(function () {
-    init();
+    //初始化数据
+    initData();
+    //初始化事件
+    initAction();
 })
 let typeList = [{
     type: "bilibili",
@@ -9,7 +12,54 @@ let typeList = [{
     nickEdit: false
 }];
 
-function init() {
+function initAction() {
+    $("#imageFile").change(() => {
+        let formData = new FormData();
+        formData.append('file', $("#imageFile")[0].files[0]);
+        formData.append("type", "ashioarae");
+        $.ajax({
+            url: host + "file",
+            type: "POST",
+            cache: false,
+            data: formData,
+            processData: false,
+            contentType: false
+        }).done(res => {
+            let preHead = $("#preHeadImage");
+            preHead.prop("src", host + "file/public/" + res + "?time=" + new Date());
+            preHead.attr("upPath", res);
+        });
+    });
+    $("#update").click(() => {
+        $.post(host + "ashi", JSON.stringify({
+            type: "ashioarae",
+            nickname: $("#preNick").val(),
+            headImage: $("#preHeadImage").attr("upPath"),
+            cookie: "ashiCookie=null"
+        })).done(() => {
+            update();
+        });
+    });
+}
+
+/**
+ * 进行同步
+ */
+function update() {
+    typeList.forEach(t => {
+        if (t.nickEdit) {
+            $.ajax(host + "ashi/nick/" + t.type, {type: "put"});
+        }
+        if (t.headEdit) {
+            $.ajax(host + "ashi/head/" + t.type, {type: "put"});
+        }
+    });
+}
+
+/**
+ * 初始化数据
+ */
+function initData() {
     // 获取预更新数据
     $.get(host + "ashi", null).then(res => {
         let item = $("#ashiData")
@@ -17,8 +67,9 @@ function init() {
         nickInput.val(res.nickname);
         let image = item.find(".headImage")
         image.prop("src", host + "file/public/" + res.headImage);
+        image.attr("upPath", res.headImage);
         image.click(() => {
-            item.find(".imageFile").click();
+            item.find("#imageFile").click();
         })
     });
     //初始化所有其他目的类型
@@ -29,9 +80,6 @@ function init() {
             console.log(cookie);
             $.post(host + "ashi", JSON.stringify({
                 type: t.type,
-                //FIXME 使用ashi数据而不使用type数据
-                nickname: "shali",
-                headImage: "shali/ashioarae.jpg",
                 cookie: cookie
             })).then(() => {
                     // 请求当前数据
