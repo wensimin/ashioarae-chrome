@@ -37,8 +37,13 @@ function initAction() {
             headImage: $("#preHeadImage").attr("upPath"),
             cookie: "ashiCookie=null"
         })).done(() => {
+            message("预更新信息已保存,开始同步各平台", messageType.good);
             update();
         });
+    });
+    $("#clearMessage").click(() => {
+        $("#clearMessage").hide();
+        $("#message").empty();
     });
 }
 
@@ -48,10 +53,14 @@ function initAction() {
 function update() {
     typeList.forEach(t => {
         if (t.nickEdit) {
-            $.ajax(host + "ashi/nick/" + t.type, {type: "put"});
+            $.ajax(host + "ashi/nick/" + t.type, {type: "put"}).then(() => {
+                message(t.type + ":昵称更新完毕", messageType.good);
+            });
         }
         if (t.headEdit) {
-            $.ajax(host + "ashi/head/" + t.type, {type: "put"});
+            $.ajax(host + "ashi/head/" + t.type, {type: "put"}).then(() => {
+                message(t.type + ":头像更新完毕", messageType.good);
+            });
         }
     });
 }
@@ -76,8 +85,6 @@ function initData() {
     typeList.forEach(function (t) {
         getCookieString(t.domain, t.needCookie).then(cookie => {
             //上传cookie
-            debugger;
-            console.log(cookie);
             $.post(host + "ashi", JSON.stringify({
                 type: t.type,
                 cookie: cookie
