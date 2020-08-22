@@ -16,7 +16,6 @@ function initAction() {
     $("#imageFile").change(() => {
         let formData = new FormData();
         formData.append('file', $("#imageFile")[0].files[0]);
-        formData.append("type", "ashioarae");
         $.ajax({
             url: host + "file",
             type: "POST",
@@ -31,11 +30,9 @@ function initAction() {
         });
     });
     $("#update").click(() => {
-        $.post(host + "ashi", JSON.stringify({
-            type: "ashioarae",
+        $.post(host + "ashi/pre", JSON.stringify({
             nickname: $("#preNick").val(),
-            headImage: $("#preHeadImage").attr("upPath"),
-            cookie: "ashiCookie=null"
+            headImage: $("#preHeadImage").attr("upPath")
         })).done(() => {
             message("预更新信息已保存,开始同步各平台", messageType.good);
             update();
