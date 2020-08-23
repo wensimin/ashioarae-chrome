@@ -10,6 +10,12 @@ let typeList = [{
     needCookie: ["SESSDATA", "bili_jct", "DedeUserID"],
     headEdit: true,
     nickEdit: false
+}, {
+    type: "steam",
+    domain: "steamcommunity.com",
+    needCookie: null,
+    headEdit: true,
+    nickEdit: false
 }];
 
 function initAction() {
@@ -89,7 +95,7 @@ function initData() {
                     // 请求当前数据
                     $.get(host + "ashi/" + t.type, null, function (res) {
                         let item = $("#ashiItem").clone();
-                        item.find(".type").val(t.type);
+                        item.find(".type").html(t.type);
                         let nickInput = item.find(".nickValue")
                         nickInput.val(res.nickname);
                         nickInput.prop("disabled", !t.nickEdit);
@@ -114,14 +120,24 @@ async function getCookieString(domain, needCookie) {
     let cookieString = "";
     await new Promise((resolve) => {
         chrome.cookies.getAll({domain: domain}, function (cookies) {
+            if (!cookies) {
+                message(domain + "的cookie未获取", messageType.info);
+            }
             cookies.forEach(function (c) {
-                debugger
-                if (needCookie.includes(c.name)) {
+                if (needCookie) {
+                    if (needCookie.includes(c.name)) {
+                        if (cookieString) {
+                            cookieString += "; ";
+                        }
+                        cookieString += c.name + "=" + c.value;
+                    }
+                } else {
                     if (cookieString) {
                         cookieString += "; ";
                     }
                     cookieString += c.name + "=" + c.value;
                 }
+
             });
             resolve();
         });

@@ -19,6 +19,7 @@
     "activeTab",
     "storage",
     "cookies",
-    "*://*.bilibili.com/*"
+    "*://*.bilibili.com/*",
+    "*://*.steamcommunity.com/*"
   ]
 }
