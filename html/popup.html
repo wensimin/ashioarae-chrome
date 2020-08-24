@@ -30,6 +30,8 @@
         align-items: center;
         display: flex;
         justify-content: space-between;
+        flex-direction: row;
+        flex-wrap: wrap;
       }
 
       .spinner {
@@ -109,24 +111,25 @@
     <div class="spinner" id="spinner"></div>
   </div>
   <h1>同步器</h1>
-  <div id="message">
+  <div>
+    <div id="message">
+    </div>
+    <button id="clearMessage" hidden>清除信息</button>
+    <div id="ashiData">
+      <label class="nickLabel">预改动昵称:</label> <input class="nickValue" id="preNick"/>
+      <label>预改动头像</label>
+      <img class="headImage" id="preHeadImage" src=""/>
+      <input hidden id="imageFile" type="file"/>
+      <button id="update">进行同步</button>
+    </div>
+    <br/>
   </div>
-  <button id="clearMessage" hidden>清除信息</button>
-  <div id="ashiData">
-    <label class="nickLabel">预改动昵称:</label> <input class="nickValue" id="preNick"/>
-    <label>预改动头像</label>
-    <img class="headImage" id="preHeadImage" src=""/>
-    <input hidden id="imageFile" type="file"/>
-    <button id="update">进行同步</button>
-  </div>
-  <br/>
   <div id="container">
     <div id="ashiItem" hidden>
       <label class="type">bilibili:</label>
       <label class="nickLabel">当前昵称:</label> <input class="nickValue"/>
       <label>当前头像</label>
       <img class="headImage" src=""/>
-      <br/>
     </div>
   </div>
 

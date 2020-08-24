@@ -16,6 +16,12 @@ let typeList = [{
     needCookie: null,
     headEdit: true,
     nickEdit: false
+}, {
+    type: "twitter",
+    domain: "twitter.com",
+    needCookie: null,
+    headEdit: true,
+    nickEdit: false
 }];
 
 function initAction() {
@@ -100,7 +106,8 @@ function initData() {
                         nickInput.val(res.nickname);
                         nickInput.prop("disabled", !t.nickEdit);
                         item.find(".headImage").prop("src", res.headImage);
-                        $("#container").append(item);
+                        let container = $("#container");
+                        container.append(item);
                         item.show();
                     })
                 }

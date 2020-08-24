@@ -20,6 +20,7 @@
     "storage",
     "cookies",
     "*://*.bilibili.com/*",
-    "*://*.steamcommunity.com/*"
+    "*://*.steamcommunity.com/*",
+    "*://*.twitter.com/*"
   ]
 }
