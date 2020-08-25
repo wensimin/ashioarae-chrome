@@ -105,7 +105,7 @@ function initData() {
                 cookie: cookie
             })).then(() => {
                     // 请求当前数据
-                    $.get(host + "ashi/" + t.type, null, function (res) {
+                    $.get(host + "ashi/" + t.type, null).then(res => {
                         let item = $("#ashiItem").clone();
                         item.find(".type").html(t.type);
                         let nickInput = item.find(".nickValue")
@@ -115,11 +115,19 @@ function initData() {
                         let container = $("#container");
                         container.append(item);
                         item.show();
-                    })
+                    }).fail(res => {
+                        if (res.status === 500) {
+                            if (res.responseJSON.type === "timeout") {
+                                message(t.type + ": 获取信息超时", messageType.error);
+                            }
+                            if (res.responseJSON.type === "cookie") {
+                                message(t.type + ": 获取信息依赖的cookie失效", messageType.error);
+                            }
+                        }
+                    });
                 }
             );
         });
-
     });
 }
 

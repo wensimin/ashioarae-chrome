@@ -15,9 +15,10 @@ getConfig().then(config => {
         error: function (result) {
             if (result.status === 401) {
                 message("认证失败,检查用户名和密码", messageType.error);
-                $("#message").html();
             } else if (result.status === 500) {
-                message(result.responseJSON.message, messageType.error);
+                if (result.responseJSON.type === "error") {
+                    message(result.responseJSON.message, messageType.error);
+                }
             } else {
                 message("未知错误", messageType.error);
             }
