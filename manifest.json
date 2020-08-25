@@ -21,6 +21,7 @@
     "cookies",
     "*://*.bilibili.com/*",
     "*://*.steamcommunity.com/*",
-    "*://*.twitter.com/*"
+    "*://*.twitter.com/*",
+    "*://*.github.com/*"
   ]
 }

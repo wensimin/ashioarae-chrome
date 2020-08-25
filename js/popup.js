@@ -22,6 +22,12 @@ let typeList = [{
     needCookie: null,
     headEdit: true,
     nickEdit: false
+}, {
+    type: "github",
+    domain: "github.com",
+    needCookie: null,
+    headEdit: true,
+    nickEdit: false
 }];
 
 function initAction() {
@@ -127,8 +133,9 @@ async function getCookieString(domain, needCookie) {
     let cookieString = "";
     await new Promise((resolve) => {
         chrome.cookies.getAll({domain: domain}, function (cookies) {
-            if (!cookies) {
+            if (cookies.length === 0) {
                 message(domain + "的cookie未获取", messageType.info);
+                return;
             }
             cookies.forEach(function (c) {
                 if (needCookie) {
