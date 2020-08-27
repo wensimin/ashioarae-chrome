@@ -62,6 +62,22 @@ function initAction() {
     });
 }
 
+function errorMessage(t, res) {
+    if (res.status === 500) {
+        if (res.responseJSON.type === "cookie") {
+            message(t.type + ": cookie失效", messageType.error, "跳转获取cookie", () => {
+                window.open("https://" + t.domain);
+            });
+        } else if (res.responseJSON.type === "timeout") {
+            message(t.type + ": 获取信息超时", messageType.error);
+        } else if (res.responseJSON.type === "error") {
+            message(t.type + "出现错误: " + res.responseJSON.message, messageType.error);
+        }
+    } else {
+        message(t.type + "未知错误", messageType.error);
+    }
+}
+
 /**
  * 进行同步
  */
@@ -73,8 +89,10 @@ function update() {
             });
         }
         if (t.headEdit) {
-            $.ajax(host + "ashi/head/" + t.type, {type: "put"}).then(() => {
+            $.ajax(host + "ashi/head/" + t.type, {type: "put", global: false}).then(() => {
                 message(t.type + ":头像更新完毕", messageType.good);
+            }).fail(res => {
+                errorMessage(t, res);
             });
         }
     });
@@ -105,8 +123,8 @@ function initData() {
                 cookie: cookie
             })).then(() => {
                     // 请求当前数据
-                    $.get(host + "ashi/" + t.type, null).then(res => {
-                        let item = $("#ashiItem").clone();
+                    $.ajax(host + "ashi/" + t.type, {type: "get", global: false}).then(res => {
+                        let item = $(".ashiItem").first().clone();
                         item.find(".type").html(t.type);
                         let nickInput = item.find(".nickValue")
                         nickInput.val(res.nickname);
@@ -116,14 +134,7 @@ function initData() {
                         container.append(item);
                         item.show();
                     }).fail(res => {
-                        if (res.status === 500) {
-                            if (res.responseJSON.type === "timeout") {
-                                message(t.type + ": 获取信息超时", messageType.error);
-                            }
-                            if (res.responseJSON.type === "cookie") {
-                                message(t.type + ": 获取信息依赖的cookie失效", messageType.error);
-                            }
-                        }
+                        errorMessage(t, res);
                     });
                 }
             );

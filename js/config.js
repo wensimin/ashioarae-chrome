@@ -1,4 +1,4 @@
-let host = "http://127.0.0.1:8080/"
+let host = "http://127.0.0.1:8080/ashioarae/"
 
 let messageType = {
     error: "red",
@@ -7,27 +7,26 @@ let messageType = {
 }
 
 getConfig().then(config => {
+
     $.ajaxSetup({
         headers: {
             "Authorization": "Basic " + btoa(config["username"] + ":" + config["password"])
         },
         contentType: 'application/json; charset=utf-8',
-        error: function (result) {
-            if (result.status === 401) {
-                message("认证失败,检查用户名和密码", messageType.error);
-            } else if (result.status === 500) {
-                if (result.responseJSON.type === "error") {
-                    message(result.responseJSON.message, messageType.error);
-                }
-            } else {
-                message("未知错误", messageType.error);
-            }
-        },
         beforeSend: function () {
             startLoad();
         },
         complete: function () {
             stopLoad();
+        }
+    });
+    $(document).ajaxError((e, xhr) => {
+        if (xhr.status === 401) {
+            message("认证失败,检查用户名和密码", messageType.error);
+        } else if (xhr.status === 500) {
+            message(xhr.responseJSON.message, messageType.error);
+        } else {
+            message("未知错误", messageType.error);
         }
     });
 })
@@ -46,10 +45,18 @@ function stopLoad() {
 }
 
 
-function message(text, color) {
-    let p = document.createElement("p")
+function message(text, color, actionText, action) {
+    let messageItem = $(".messageItem").first().clone();
+    $("#message").append(messageItem);
+    let p = messageItem.find("p");
     $(p).text(text).css("color", color)
-    $("#message").append(p);
+    if (actionText && action) {
+        let button = messageItem.find("button")
+        button.text(actionText);
+        button.click(action);
+        button.show();
+    }
+    messageItem.show();
     $("#clearMessage").show();
 }
 
