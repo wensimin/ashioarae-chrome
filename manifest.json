@@ -22,6 +22,7 @@
     "*://*.bilibili.com/*",
     "*://*.steamcommunity.com/*",
     "*://*.twitter.com/*",
-    "*://*.github.com/*"
+    "*://*.github.com/*",
+    "*://*.google.com/*"
   ]
 }

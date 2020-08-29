@@ -7,28 +7,30 @@ $(function () {
 let typeList = [{
     type: "bilibili",
     domain: "bilibili.com",
-    needCookie: ["SESSDATA", "bili_jct", "DedeUserID"],
     headEdit: true,
     nickEdit: false
 }, {
     type: "steam",
     domain: "steamcommunity.com",
-    needCookie: null,
     headEdit: true,
     nickEdit: false
 }, {
     type: "twitter",
     domain: "twitter.com",
-    needCookie: null,
     headEdit: true,
     nickEdit: false
 }, {
     type: "github",
     domain: "github.com",
-    needCookie: null,
     headEdit: true,
     nickEdit: false
-}];
+}, {
+    type: "google",
+    domain: "google.com",
+    headEdit: true,
+    nickEdit: false
+}
+];
 
 function initAction() {
     $("#imageFile").change(() => {
@@ -120,7 +122,8 @@ function initData() {
             //上传cookie
             $.post(host + "ashi", JSON.stringify({
                 type: t.type,
-                cookie: cookie
+                cookie: "null=null",
+                cookies: cookie
             })).then(() => {
                     // 请求当前数据
                     $.ajax(host + "ashi/" + t.type, {type: "get", global: false}).then(res => {
@@ -149,31 +152,16 @@ function initData() {
  * @returns {Promise<string>} cookieString
  */
 async function getCookieString(domain, needCookie) {
-    let cookieString = "";
+    let resCookie = "";
     await new Promise((resolve) => {
         chrome.cookies.getAll({domain: domain}, function (cookies) {
             if (cookies.length === 0) {
                 message(domain + "的cookie未获取", messageType.info);
                 return;
             }
-            cookies.forEach(function (c) {
-                if (needCookie) {
-                    if (needCookie.includes(c.name)) {
-                        if (cookieString) {
-                            cookieString += "; ";
-                        }
-                        cookieString += c.name + "=" + c.value;
-                    }
-                } else {
-                    if (cookieString) {
-                        cookieString += "; ";
-                    }
-                    cookieString += c.name + "=" + c.value;
-                }
-
-            });
+            resCookie = cookies;
             resolve();
         });
     })
-    return cookieString;
+    return resCookie;
 }
