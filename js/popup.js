@@ -95,20 +95,20 @@ function update() {
             });
         }
         if (t.headEdit) {
-            updateHead(t.type);
+            updateHead(t);
         }
     });
 }
 
 /**
  * 更新头像
- * @param type 目标平台类型
+ * @param t  目标平台
  */
-function updateHead(type) {
-    $.ajax(host + "ashi/head/" + type, {type: "put", global: false}).then(() => {
-        message(type + ":头像更新完毕", messageType.good);
+function updateHead(t) {
+    $.ajax(host + "ashi/head/" + t.type, {type: "put", global: false}).then(() => {
+        message(t.type + ":头像更新完毕", messageType.good);
     }).fail(res => {
-        errorMessage(type, res, "重试", () => updateHead(type));
+        errorMessage(t, res, "重试", () => updateHead(t));
     });
 }
 
@@ -154,7 +154,7 @@ function getAshiTarget(t) {
         let nickLabel = item.find(".nickValue")
         nickLabel.html(res.nickname);
         item.find(".headImage").prop("src", res.headImage);
-        item.find(".updateButton").click(() => updateHead(t.type));
+        item.find(".updateButton").click(() => updateHead(t));
         let container = $("#container");
         container.append(item);
         item.show();
