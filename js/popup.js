@@ -45,7 +45,7 @@ function initAction() {
             contentType: false
         }).done(res => {
             let preHead = $("#preHeadImage");
-            preHead.prop("src", host + "file/public/" + res + "?time=" + new Date());
+            preHead.prop("src", host + "file/public/" + res + "?time=" + new Date().getTime());
             preHead.attr("upPath", res);
         });
     });
@@ -58,20 +58,23 @@ function initAction() {
             update();
         });
     });
-    $("#clearMessage").click(() => {
-        $("#clearMessage").hide();
-        $("#message").empty();
-    });
 }
 
-function errorMessage(t, res) {
+/**
+ * 错误消息
+ * @param t 当前的目标target平台
+ * @param res http res
+ * @param actionText 消息按钮文本
+ * @param action 附带的事件
+ */
+function errorMessage(t, res, actionText, action) {
     if (res.status === 500) {
         if (res.responseJSON.type === "cookie") {
             message(t.type + ": cookie失效", messageType.error, "跳转获取cookie", () => {
                 window.open("https://" + t.domain);
             });
         } else if (res.responseJSON.type === "timeout") {
-            message(t.type + ": 获取信息超时", messageType.error);
+            message(t.type + ": 获取信息超时", messageType.error, actionText, action);
         } else if (res.responseJSON.type === "error") {
             message(t.type + "出现错误: " + res.responseJSON.message, messageType.error);
         }
@@ -79,6 +82,7 @@ function errorMessage(t, res) {
         message(t.type + "未知错误", messageType.error);
     }
 }
+
 
 /**
  * 进行同步
@@ -91,14 +95,23 @@ function update() {
             });
         }
         if (t.headEdit) {
-            $.ajax(host + "ashi/head/" + t.type, {type: "put", global: false}).then(() => {
-                message(t.type + ":头像更新完毕", messageType.good);
-            }).fail(res => {
-                errorMessage(t, res);
-            });
+            updateHead(t.type);
         }
     });
 }
+
+/**
+ * 更新头像
+ * @param type 目标平台类型
+ */
+function updateHead(type) {
+    $.ajax(host + "ashi/head/" + type, {type: "put", global: false}).then(() => {
+        message(type + ":头像更新完毕", messageType.good);
+    }).fail(res => {
+        errorMessage(type, res, "重试", () => updateHead(type));
+    });
+}
+
 
 /**
  * 初始化数据
@@ -118,40 +131,44 @@ function initData() {
     });
     //初始化所有其他目的类型
     typeList.forEach(function (t) {
-        getCookieString(t.domain, t.needCookie).then(cookie => {
+        getCookieString(t.domain).then(cookie => {
             //上传cookie
             $.post(host + "ashi", JSON.stringify({
                 type: t.type,
                 cookie: "null=null",
                 cookies: cookie
-            })).then(() => {
-                    // 请求当前数据
-                    $.ajax(host + "ashi/" + t.type, {type: "get", global: false}).then(res => {
-                        let item = $(".ashiItem").first().clone();
-                        item.find(".type").html(t.type);
-                        let nickInput = item.find(".nickValue")
-                        nickInput.val(res.nickname);
-                        nickInput.prop("disabled", !t.nickEdit);
-                        item.find(".headImage").prop("src", res.headImage);
-                        let container = $("#container");
-                        container.append(item);
-                        item.show();
-                    }).fail(res => {
-                        errorMessage(t, res);
-                    });
-                }
-            );
+            })).then(() => getAshiTarget(t));
         });
+    });
+}
+
+/**
+ * 获取对应平台的信息
+ * @param t target
+ */
+function getAshiTarget(t) {
+    // 请求当前数据
+    $.ajax(host + "ashi/" + t.type, {type: "get", global: false}).then(res => {
+        let item = $(".ashiItem").first().clone();
+        item.find(".type").html(t.type);
+        let nickLabel = item.find(".nickValue")
+        nickLabel.html(res.nickname);
+        item.find(".headImage").prop("src", res.headImage);
+        item.find(".updateButton").click(() => updateHead(t.type));
+        let container = $("#container");
+        container.append(item);
+        item.show();
+    }).fail(res => {
+        errorMessage(t, res, "重试", () => getAshiTarget(t));
     });
 }
 
 /**
  * 获取指定域名的cookie
  * @param domain 域名
- * @param needCookie 需要的cookie列表
  * @returns {Promise<string>} cookieString
  */
-async function getCookieString(domain, needCookie) {
+async function getCookieString(domain) {
     let resCookie = "";
     await new Promise((resolve) => {
         chrome.cookies.getAll({domain: domain}, function (cookies) {

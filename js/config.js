@@ -44,21 +44,39 @@ function stopLoad() {
     }
 }
 
-
+/**
+ * 增加消息
+ * @param text 消息文本
+ * @param color 消息颜色
+ * @param actionText 消息附带的按钮信息
+ * @param action 消息按钮事件
+ */
 function message(text, color, actionText, action) {
     let messageItem = $(".messageItem").first().clone();
     $("#message").append(messageItem);
     let p = messageItem.find("p");
     $(p).text(text).css("color", color)
     if (actionText && action) {
-        let button = messageItem.find("button")
+        let button = messageItem.find(".button")
         button.text(actionText);
-        button.click(action);
+        button.click(() => {
+            messageItem.hide();
+            button.hide();
+            action();
+        });
         button.show();
     }
     messageItem.show();
     $("#clearMessage").show();
 }
+
+$(function (){
+    // 初始化清除消息按钮
+    $("#clearMessage").click(() => {
+        $("#clearMessage").hide();
+        $("#message").empty();
+    });
+})
 
 
 async function getConfig() {

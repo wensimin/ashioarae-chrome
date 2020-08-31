@@ -32,6 +32,21 @@
         justify-content: space-between;
         flex-direction: row;
         flex-wrap: wrap;
+        text-align: center;
+      }
+
+      .ashiItem {
+        margin-bottom: 10px
+      }
+
+      .updateButton {
+        background: url(../icon/refresh-button.png) no-repeat;
+        width: 40px;
+        height: 40px;
+        border: 0;
+      }
+      .updateButton :hover {
+        border: 1px outset;
       }
 
       .spinner {
@@ -116,24 +131,30 @@
     </div>
     <div class="messageItem" hidden>
       <p style="display: inline">error</p>
-      <button hidden>button</button>
+      <button class="button" hidden>button</button>
     </div>
     <button id="clearMessage" hidden>清除信息</button>
     <div id="ashiData">
-      <label class="nickLabel">预改动昵称:</label> <input class="nickValue" id="preNick"/>
-      <label>预改动头像</label>
+      <label class="nickLabel">预改动昵称:</label>
+      <br/>
+      <input class="nickValue" id="preNick"/>
+      <br/>
       <img class="headImage" id="preHeadImage" src=""/>
       <input hidden id="imageFile" type="file"/>
-      <button id="update">进行同步</button>
+      <br/>
+      <button id="update">全部同步</button>
     </div>
     <br/>
   </div>
   <div id="container">
     <div class="ashiItem" hidden>
-      <label class="type">bilibili:</label>
-      <label class="nickLabel">当前昵称:</label> <input class="nickValue"/>
-      <label>当前头像</label>
+      <label>目标平台:</label><label class="type">bilibili:</label>
+      <br/>
+      <label class="nickLabel">当前昵称:</label> <label class="nickValue">sss</label>
+      <br/>
       <img class="headImage" src=""/>
+      <br/>
+      <button class="updateButton" title="同步"></button>
     </div>
   </div>
 
