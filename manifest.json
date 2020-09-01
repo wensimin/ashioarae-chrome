@@ -23,6 +23,7 @@
     "*://*.steamcommunity.com/*",
     "*://*.twitter.com/*",
     "*://*.github.com/*",
-    "*://*.google.com/*"
+    "*://*.google.com/*",
+    "*://*.instagram.com/*"
   ]
 }

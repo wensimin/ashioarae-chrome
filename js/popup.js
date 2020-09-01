@@ -29,8 +29,12 @@ let typeList = [{
     domain: "google.com",
     headEdit: true,
     nickEdit: false
-}
-];
+}, {
+    type: "instagram",
+    domain: "instagram.com",
+    headEdit: true,
+    nickEdit: false
+}];
 
 function initAction() {
     $("#imageFile").change(() => {
