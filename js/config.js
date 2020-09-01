@@ -60,9 +60,11 @@ function message(text, color, actionText, action) {
         let button = messageItem.find(".button")
         button.text(actionText);
         button.click(() => {
-            messageItem.hide();
-            button.hide();
             action();
+            messageItem.remove();
+            if ($("#message").children().length === 0) {
+                $("#clearMessage").click();
+            }
         });
         button.show();
     }

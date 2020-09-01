@@ -135,7 +135,6 @@ function initData() {
             //上传cookie
             $.post(host + "ashi", JSON.stringify({
                 type: t.type,
-                cookie: "null=null",
                 cookies: cookie
             })).then(() => getAshiTarget(t));
         });
