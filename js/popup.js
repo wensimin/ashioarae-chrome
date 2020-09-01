@@ -92,7 +92,12 @@ function errorMessage(t, res, actionText, action) {
  * 进行同步
  */
 function update() {
-    typeList.forEach(t => {
+    typeList.forEach(async t => {
+        let config = await getConfig()
+        let tarConfig = config.tarConfig;
+        if (!tarConfig[t.type]) {
+            return;
+        }
         if (t.nickEdit) {
             $.ajax(host + "ashi/nick/" + t.type, {type: "put"}).then(() => {
                 message(t.type + ":昵称更新完毕", messageType.good);
@@ -134,14 +139,18 @@ function initData() {
         })
     });
     //初始化所有其他目的类型
-    typeList.forEach(function (t) {
-        getCookieString(t.domain).then(cookie => {
-            //上传cookie
-            $.post(host + "ashi", JSON.stringify({
-                type: t.type,
-                cookies: cookie
-            })).then(() => getAshiTarget(t));
-        });
+    typeList.forEach(async function (t) {
+        let config = await getConfig()
+        let tarConfig = config.tarConfig;
+        if (!tarConfig[t.type]) {
+            return;
+        }
+        let cookie = await getCookieString(t.domain);
+        //上传cookie
+        $.post(host + "ashi", JSON.stringify({
+            type: t.type,
+            cookies: cookie
+        })).then(() => getAshiTarget(t));
     });
 }
 
@@ -172,16 +181,13 @@ function getAshiTarget(t) {
  * @returns {Promise<string>} cookieString
  */
 async function getCookieString(domain) {
-    let resCookie = "";
-    await new Promise((resolve) => {
+    return await new Promise((resolve) => {
         chrome.cookies.getAll({domain: domain}, function (cookies) {
             if (cookies.length === 0) {
                 message(domain + "的cookie未获取", messageType.info);
                 return;
             }
-            resCookie = cookies;
-            resolve();
+            resolve(cookies);
         });
-    })
-    return resCookie;
+    });
 }

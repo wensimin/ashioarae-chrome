@@ -1,13 +1,44 @@
-$(function () {
-    chrome.storage.sync.get(null, (config) => {
-        $("#username").val(config["username"]);
-        $("#password").val(config["password"]);
-    });
+function initTar(config) {
+    let tarConfig = config.tarConfig;
+    if (!tarConfig) {
+        tarConfig = {
+            bilibili: false,
+            steam: false,
+            twitter: false,
+            github: false,
+            google: false,
+            instagram: false
+        };
+        config.tarConfig = tarConfig;
+        setConfig(config);
+    }
+    let tarConfigs = $("#tarConfigs");
+    new Map(Object.entries(tarConfig)).forEach((value, key) => {
+        let tarConfigItem = $(".tarConfigItem").first().clone();
+        tarConfigItem.find("label").html(key);
+        let radio = tarConfigItem.find(".radio");
+        radio.prop("checked", value);
+        radio.click(() => {
+            tarConfig[key] = radio.prop("checked");
+            config.tarConfig = tarConfig;
+            setConfig(config);
+        });
+        tarConfigs.append(tarConfigItem);
+        tarConfigItem.show();
+    })
+}
+
+$(async function () {
+    let config = await getConfig();
+    $("#username").val(config.username);
+    $("#password").val(config.password);
+    initTar(config);
     $("#auth").click(function () {
         let username = $("#username").val();
         let password = $("#password").val();
-        let config = {"username": username, "password": password};
-        chrome.storage.sync.set(config);
+        config.username = username;
+        config.password = password;
+        setConfig(config);
         $.ajax(host + "user", {
             headers: {
                 "Authorization": "Basic " + btoa(config["username"] + ":" + config["password"])

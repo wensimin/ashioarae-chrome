@@ -6,8 +6,8 @@ let messageType = {
     info: "black"
 }
 
-getConfig().then(config => {
-
+async function ajaxInit() {
+    let config = await getConfig();
     $.ajaxSetup({
         headers: {
             "Authorization": "Basic " + btoa(config["username"] + ":" + config["password"])
@@ -29,7 +29,9 @@ getConfig().then(config => {
             message("未知错误", messageType.error);
         }
     });
-})
+}
+
+ajaxInit().then();
 
 let xhrCount = 0
 
@@ -82,13 +84,14 @@ $(function (){
 
 
 async function getConfig() {
-    let config = {};
-    await new Promise(resolve => {
+    return await new Promise(resolve => {
         chrome.storage.sync.get(null, (c) => {
-            config = c;
-            resolve();
+            resolve(c);
         });
-    })
-    return config;
+    });
+}
+
+function setConfig(config) {
+    chrome.storage.sync.set(config);
 }
 
