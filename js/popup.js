@@ -1,6 +1,6 @@
 $(function () {
     //初始化数据
-    initData();
+    initData().then();
     //初始化事件
     initAction();
 })
@@ -59,7 +59,7 @@ function initAction() {
             headImage: $("#preHeadImage").attr("upPath")
         })).done(() => {
             message("预更新信息已保存,开始同步各平台", messageType.good);
-            update();
+            update().then();
         });
     });
 }
@@ -91,12 +91,12 @@ function errorMessage(t, res, actionText, action) {
 /**
  * 进行同步
  */
-function update() {
-    typeList.forEach(async t => {
+async function update() {
+    for (const t of typeList) {
         let config = await getConfig()
         let tarConfig = config.tarConfig;
         if (!tarConfig[t.type]) {
-            return;
+            continue;
         }
         if (t.nickEdit) {
             $.ajax(host + "ashi/nick/" + t.type, {type: "put"}).then(() => {
@@ -106,7 +106,7 @@ function update() {
         if (t.headEdit) {
             updateHead(t);
         }
-    });
+    }
 }
 
 /**
@@ -125,7 +125,7 @@ function updateHead(t) {
 /**
  * 初始化数据
  */
-function initData() {
+async function initData() {
     // 获取预更新数据
     $.get(host + "ashi", null).then(res => {
         let item = $("#ashiData")
@@ -139,11 +139,11 @@ function initData() {
         })
     });
     //初始化所有其他目的类型
-    typeList.forEach(async function (t) {
+    for (const t of typeList) {
         let config = await getConfig()
         let tarConfig = config.tarConfig;
         if (!tarConfig[t.type]) {
-            return;
+            continue;
         }
         let cookie = await getCookieString(t.domain);
         //上传cookie
@@ -151,7 +151,7 @@ function initData() {
             type: t.type,
             cookies: cookie
         })).then(() => getAshiTarget(t));
-    });
+    }
 }
 
 /**
