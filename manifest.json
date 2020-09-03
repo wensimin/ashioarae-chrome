@@ -24,6 +24,8 @@
     "*://*.twitter.com/*",
     "*://*.github.com/*",
     "*://*.google.com/*",
-    "*://*.instagram.com/*"
+    "*://*.instagram.com/*",
+    "*://*.weibo.com/*",
+    "*://*.baidu.com/*"
   ]
 }

@@ -34,6 +34,16 @@ let typeList = [{
     domain: "instagram.com",
     headEdit: true,
     nickEdit: false
+}, {
+    type: "weibo",
+    domain: "weibo.com",
+    headEdit: true,
+    nickEdit: false
+}, {
+    type: "baidu",
+    domain: "baidu.com",
+    headEdit: true,
+    nickEdit: false
 }];
 
 function initAction() {

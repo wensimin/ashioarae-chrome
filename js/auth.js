@@ -7,7 +7,9 @@ function initTar(config) {
             twitter: false,
             github: false,
             google: false,
-            instagram: false
+            instagram: false,
+            weibo: false,
+            baidu: false
         };
         config.tarConfig = tarConfig;
         setConfig(config);
