@@ -4,47 +4,45 @@ $(function () {
     //初始化事件
     initAction();
 })
-let typeList = [{
-    type: "bilibili",
-    domain: "bilibili.com",
-    headEdit: true,
-    nickEdit: false
-}, {
-    type: "steam",
-    domain: "steamcommunity.com",
-    headEdit: true,
-    nickEdit: false
-}, {
-    type: "twitter",
-    domain: "twitter.com",
-    headEdit: true,
-    nickEdit: false
-}, {
-    type: "github",
-    domain: "github.com",
-    headEdit: true,
-    nickEdit: false
-}, {
-    type: "google",
-    domain: "google.com",
-    headEdit: true,
-    nickEdit: false
-}, {
-    type: "instagram",
-    domain: "instagram.com",
-    headEdit: true,
-    nickEdit: false
-}, {
-    type: "weibo",
-    domain: "weibo.com",
-    headEdit: true,
-    nickEdit: false
-}, {
-    type: "baidu",
-    domain: "baidu.com",
-    headEdit: true,
-    nickEdit: false
-}];
+
+class Type {
+    /**
+     * domain: string, 域名,关系到cookie范围
+     * nickEdit: boolean, 昵称是否可编辑,后端未实现的属性,昵称目前全部不可编辑
+     * type: string, 类型枚举,和后端1:1
+     * headEdit: boolean 头像是否可以编辑 目前全部为true
+     * cookiePage: string  获取cookie的页面,为空时会以https协议跳转domain
+     * cacheClear: boolean 是否清除头像缓存
+     * */
+    type;
+    domain;
+    cookiePage;
+    headEdit = true;
+    nickEdit = false;
+    cacheClear = true
+
+    constructor(type, domain, cookiePage = null, cacheClear = true, headEdit = true, nickEdit = false) {
+        this.type = type;
+        this.domain = domain;
+        this.cookiePage = cookiePage;
+        this.headEdit = headEdit;
+        this.nickEdit = nickEdit;
+        this.cacheClear = cacheClear;
+    }
+
+}
+
+
+let typeList = [
+    new Type("bilibili", "bilibili.com"),
+    new Type("steam", "steamcommunity.com"),
+    new Type("twitter", "twitter.com", null, false),
+    new Type("github", "github.com"),
+    new Type("google", "google.com"),
+    new Type("instagram", "instagram.com"),
+    new Type("weibo", "weibo.com"),
+    new Type("baidu", "baidu.com", "https://tieba.baidu.com"),
+]
 
 function initAction() {
     $("#imageFile").change(() => {
@@ -85,7 +83,8 @@ function errorMessage(t, res, actionText, action) {
     if (res.status === 500) {
         if (res.responseJSON.type === "cookie") {
             message(t.type + ": cookie失效", messageType.error, "跳转获取cookie", () => {
-                window.open("https://" + t.domain);
+                let url = t.cookiePage ? t.cookiePage : "https://" + t.domain;
+                window.open(url);
             });
         } else if (res.responseJSON.type === "timeout") {
             message(t.type + ": 获取信息超时", messageType.error, actionText, action);
@@ -175,7 +174,11 @@ function getAshiTarget(t) {
         item.find(".type").html(t.type);
         let nickLabel = item.find(".nickValue")
         nickLabel.html(res.nickname);
-        item.find(".headImage").prop("src", res.headImage);
+        let url = new URL(res.headImage);
+        if (t.cacheClear) {
+            url.searchParams.set('_t_', new Date().getTime().toString());
+        }
+        item.find(".headImage").prop("src", url.toString());
         item.find(".updateButton").click(() => updateHead(t));
         let container = $("#container");
         container.append(item);
@@ -201,3 +204,5 @@ async function getCookieString(domain) {
         });
     });
 }
+
+
