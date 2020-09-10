@@ -114,14 +114,17 @@ async function initData() {
         if (!tarConfig[t.type]) {
             continue;
         }
-        // 上传以前 前往cookiePage获取 set-cookie
-        await $.ajax(t.cookiePage, {type: "get", global: false});
-        let cookie = await getCookieString(t.domain);
-        //上传cookie
-        $.post(host + "ashi", JSON.stringify({
-            type: t.type,
-            cookies: cookie
-        })).then(() => getAshiTarget(t));
+        // 异步发起请求加速
+        new Promise(async () => {
+            // 上传以前 前往cookiePage获取 set-cookie
+            await $.ajax(t.cookiePage, {type: "get", global: false});
+            let cookie = await getCookieString(t.domain);
+            //上传cookie
+            $.post(host + "ashi", JSON.stringify({
+                type: t.type,
+                cookies: cookie
+            })).then(() => getAshiTarget(t));
+        }).then();
     }
 }
 
