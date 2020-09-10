@@ -5,45 +5,6 @@ $(function () {
     initAction();
 })
 
-class Type {
-    /**
-     * domain: string, 域名,关系到cookie范围
-     * nickEdit: boolean, 昵称是否可编辑,后端未实现的属性,昵称目前全部不可编辑
-     * type: string, 类型枚举,和后端1:1
-     * headEdit: boolean 头像是否可以编辑 目前全部为true
-     * cookiePage: string  获取cookie的页面,为空时会以https协议跳转domain
-     * cacheClear: boolean 是否清除头像缓存
-     * */
-    type;
-    domain;
-    cookiePage;
-    headEdit = true;
-    nickEdit = false;
-    cacheClear = true
-
-    constructor(type, domain, cookiePage = null, cacheClear = true, headEdit = true, nickEdit = false) {
-        this.type = type;
-        this.domain = domain;
-        this.cookiePage = cookiePage;
-        this.headEdit = headEdit;
-        this.nickEdit = nickEdit;
-        this.cacheClear = cacheClear;
-    }
-
-}
-
-
-let typeList = [
-    new Type("bilibili", "bilibili.com"),
-    new Type("steam", "steamcommunity.com"),
-    new Type("twitter", "twitter.com", null, false),
-    new Type("github", "github.com"),
-    new Type("google", "google.com"),
-    new Type("instagram", "instagram.com"),
-    new Type("weibo", "weibo.com"),
-    new Type("baidu", "baidu.com", "https://tieba.baidu.com"),
-]
-
 function initAction() {
     $("#imageFile").change(() => {
         let formData = new FormData();
@@ -83,8 +44,7 @@ function errorMessage(t, res, actionText, action) {
     if (res.status === 500) {
         if (res.responseJSON.type === "cookie") {
             message(t.type + ": cookie失效", messageType.error, "跳转获取cookie", () => {
-                let url = t.cookiePage ? t.cookiePage : "https://" + t.domain;
-                window.open(url);
+                window.open(t.cookiePage);
             });
         } else if (res.responseJSON.type === "timeout") {
             message(t.type + ": 获取信息超时", messageType.error, actionText, action);
@@ -154,6 +114,8 @@ async function initData() {
         if (!tarConfig[t.type]) {
             continue;
         }
+        // 上传以前 前往cookiePage获取 set-cookie
+        await $.ajax(t.cookiePage, {type: "get", global: false});
         let cookie = await getCookieString(t.domain);
         //上传cookie
         $.post(host + "ashi", JSON.stringify({
@@ -167,7 +129,7 @@ async function initData() {
  * 获取对应平台的信息
  * @param t target
  */
-function getAshiTarget(t) {
+async function getAshiTarget(t) {
     // 请求当前数据
     $.ajax(host + "ashi/" + t.type, {type: "get", global: false}).then(res => {
         let item = $(".ashiItem").first().clone();

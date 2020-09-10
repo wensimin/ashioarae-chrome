@@ -16,7 +16,6 @@
 	"128": "icon/refresh.png"
   },
   "permissions": [
-    "activeTab",
     "storage",
     "cookies",
     "*://*.bilibili.com/*",

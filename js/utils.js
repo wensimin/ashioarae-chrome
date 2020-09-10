@@ -1,10 +1,3 @@
-let host = "http://127.0.0.1:8080/ashioarae/"
-
-let messageType = {
-    error: "red",
-    good: "green",
-    info: "black"
-}
 
 async function ajaxInit() {
     let config = await getConfig();
