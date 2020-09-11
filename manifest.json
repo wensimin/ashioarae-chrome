@@ -1,23 +1,31 @@
 {
   "manifest_version": 2,
-
   "name": "ashioarae",
   "description": "用户信息同步工具",
-  "version": "1.0",
+  "version": "1.1",
   "options_page": "html/options.html",
   "browser_action": {
     "default_icon": "icon/refresh.png",
     "default_popup": "html/popup.html"
   },
-
-  "icons": { 
-	"16": "icon/refresh.png",
-	"48": "icon/refresh.png",
-	"128": "icon/refresh.png"
+  "background": {
+    "scripts": [
+      "js/jquery3.5.1.js",
+      "js/data.js",
+      "js/utils.js",
+      "js/alert.js"
+    ]
+  },
+  "icons": {
+    "16": "icon/refresh.png",
+    "48": "icon/refresh.png",
+    "128": "icon/refresh.png"
   },
   "permissions": [
     "storage",
     "cookies",
+    "alarms",
+    "notifications",
     "*://*.bilibili.com/*",
     "*://*.steamcommunity.com/*",
     "*://*.twitter.com/*",

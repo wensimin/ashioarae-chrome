@@ -5,6 +5,10 @@ $(function () {
     initAction();
 })
 
+
+/**
+ * 初始化页面的事件
+ */
 function initAction() {
     $("#imageFile").change(() => {
         let formData = new FormData();
@@ -116,8 +120,6 @@ async function initData() {
         }
         // 异步发起请求加速
         new Promise(async () => {
-            // 上传以前 前往cookiePage获取 set-cookie
-            await $.ajax(t.cookiePage, {type: "get", global: false});
             let cookie = await getCookieString(t.domain);
             //上传cookie
             $.post(host + "ashi", JSON.stringify({
@@ -153,21 +155,6 @@ async function getAshiTarget(t) {
     });
 }
 
-/**
- * 获取指定域名的cookie
- * @param domain 域名
- * @returns {Promise<string>} cookieString
- */
-async function getCookieString(domain) {
-    return await new Promise((resolve) => {
-        chrome.cookies.getAll({domain: domain}, function (cookies) {
-            if (cookies.length === 0) {
-                message(domain + "的cookie未获取", messageType.info);
-                return;
-            }
-            resolve(cookies);
-        });
-    });
-}
+
 
 
