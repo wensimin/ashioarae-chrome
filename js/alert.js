@@ -25,10 +25,11 @@ function initAlert() {
     let alertName = "refreshCookie";
     chrome.alarms.get(alertName, alert => {
             if (!alert) {
-                // 每天0点1分进行自动刷新
+                // 第一次刷新是下一天的0点1分
                 let nextDay = getNextDay(1);
                 chrome.alarms.create(alertName, {
                     when: nextDay,
+                    // 12小时进行一次循环
                     periodInMinutes: 60 * 12
                 });
             }
