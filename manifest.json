@@ -33,6 +33,7 @@
     "*://*.google.com/*",
     "*://*.instagram.com/*",
     "*://*.weibo.com/*",
+    "*://*.login.sina.com.cn/*",
     "*://*.baidu.com/*"
   ]
 }

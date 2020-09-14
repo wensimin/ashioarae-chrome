@@ -50,11 +50,14 @@ async function refreshCookie() {
         if (!tarConfig[t.type]) {
             continue;
         }
-        await $.ajax(t.cookiePage, {
-            type: "get", global: false, error: () => {
-                errorList.push(t.domain);
-            }
-        });
+        try {
+            await $.ajax(t.cookiePage, {
+                type: "get", global: false
+            });
+        } catch (e) {
+            console.log(e);
+            errorList.push(t.domain);
+        }
     }
     let message = errorList.length ? errorList.join(",") + " 发生错误" : "没有发生错误"
     chrome.notifications.create(null, {
