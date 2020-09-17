@@ -51,11 +51,9 @@ async function refreshCookie() {
             continue;
         }
         try {
-            await $.ajax(t.cookiePage, {
-                type: "get", global: false
-            });
+            await t.refreshCookie();
         } catch (e) {
-            console.log(e);
+            log(e);
             errorList.push(t.domain);
         }
     }
@@ -66,5 +64,4 @@ async function refreshCookie() {
         title: "ashioarae 刷新cookie完成",
         message: message
     });
-
 }

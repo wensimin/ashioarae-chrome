@@ -104,3 +104,13 @@ async function getCookieString(domain) {
         });
     });
 }
+
+
+/**
+ * log
+ * @param message 信息
+ * @param level 信息level
+ */
+function log(message, level = "debug") {
+    console.log(message);
+}

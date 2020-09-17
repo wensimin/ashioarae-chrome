@@ -11,8 +11,8 @@
   "background": {
     "scripts": [
       "js/jquery3.5.1.js",
-      "js/data.js",
       "js/utils.js",
+      "js/data.js",
       "js/alert.js"
     ]
   },
