@@ -100,17 +100,16 @@ function updateHead(t) {
  */
 async function initData() {
     // 获取预更新数据
-    $.get(host + "ashi", null).then(res => {
-        let item = $("#ashiData")
-        let nickInput = item.find(".nickValue")
-        nickInput.val(res.nickname);
-        let image = item.find(".headImage")
-        image.prop("src", host + "file/public/" + res.headImage);
-        image.attr("upPath", res.headImage);
-        image.click(() => {
-            item.find("#imageFile").click();
-        })
-    });
+    let res = await $.get(host + "ashi");
+    let item = $("#ashiData")
+    let nickInput = item.find(".nickValue")
+    nickInput.val(res.nickname);
+    let image = item.find(".headImage")
+    image.prop("src", host + "file/public/" + res.headImage);
+    image.attr("upPath", res.headImage);
+    image.click(() => {
+        item.find("#imageFile").click();
+    })
     //初始化所有其他目的类型
     for (const t of typeList) {
         let config = await getConfig()
