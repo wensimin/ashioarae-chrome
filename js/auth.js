@@ -1,19 +1,9 @@
 function initTar(config) {
-    let tarConfig = config.tarConfig;
-    if (!tarConfig) {
-        tarConfig = {
-            bilibili: false,
-            steam: false,
-            twitter: false,
-            github: false,
-            google: false,
-            instagram: false,
-            weibo: false,
-            baidu: false
-        };
-        config.tarConfig = tarConfig;
-        setConfig(config);
+    let tarConfig = config.tarConfig ? config.tarConfig : {};
+    for (let type of typeList) {
+        tarConfig[type.type] = tarConfig[type.type] ? tarConfig[type.type] : false;
     }
+    setConfig(config);
     let tarConfigs = $("#tarConfigs");
     new Map(Object.entries(tarConfig)).forEach((value, key) => {
         let tarConfigItem = $(".tarConfigItem").first().clone();
