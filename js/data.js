@@ -69,8 +69,13 @@ let weiboType = new Type("weibo", "weibo.com", null, null,
         let html = await $.ajax(weiboType.cookiePage, {
             type: "get", global: false
         });
-        //解析html获取第二次请求的url
-        let url = regex.exec(html)[0];
+        //解析html
+        let res = regex.exec(html);
+        if (!res) {
+            return;
+        }
+        //获取第二次请求的url
+        let url = res[0];
         //第二次请求
         $.ajax(url, {
             type: "get", global: false
