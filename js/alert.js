@@ -53,7 +53,7 @@ async function refreshCookie() {
         try {
             await t.refreshCookie();
         } catch (e) {
-            log(e);
+            log(e, logLevels.error);
             errorList.push(t.domain);
         }
     }

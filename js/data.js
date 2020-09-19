@@ -1,10 +1,19 @@
 let host = "https://shali.tech:3000/ashioarae/"
-
+// 展示的消息类型和对应颜色
 let messageType = {
     error: "red",
     good: "green",
     info: "black"
 }
+// 日志可用级别
+let logLevels = {
+    error: 0,
+    warn: 1,
+    info: 2,
+    debug: 3
+}
+// 当前日志级别
+let logLevel = logLevels.info;
 
 
 class Type {

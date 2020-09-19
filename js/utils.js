@@ -111,6 +111,9 @@ async function getCookieString(domain) {
  * @param message 信息
  * @param level 信息level
  */
-function log(message, level = "debug") {
+function log(message, level = logLevels.debug) {
+    if (level > logLevel) {
+        return;
+    }
     console.log(message);
 }
