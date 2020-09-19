@@ -54,7 +54,7 @@ function errorMessage(t, res, actionText, action) {
             message(t.type + ": 获取信息超时", messageType.error, actionText, action);
         } else if (res.responseJSON.type === "error") {
             message("未知错误", messageType.error);
-            log(t.type + "出现错误: " + res.responseJSON.message, logLevels.error);
+            log(t.type + "出现错误: " + res.responseJSON.message, logLevels.error, true);
         }
     } else {
         message(t.type + "未知错误", messageType.error);

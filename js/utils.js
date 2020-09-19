@@ -110,10 +110,17 @@ async function getCookieString(domain) {
  * log
  * @param message 信息
  * @param level 信息level
+ * @param save 是否把信息存储至远端
  */
-function log(message, level = logLevels.debug) {
+function log(message, level = logLevels.debug, save = false) {
     if (level > logLevel) {
         return;
     }
     console.log(message);
+    if (save) {
+        // save log失败也不进行其他行为
+        $.post(host + "user/log", JSON.stringify({
+            message: message
+        })).fail();
+    }
 }
