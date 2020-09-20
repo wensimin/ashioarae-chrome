@@ -58,7 +58,7 @@ async function refreshCookie() {
         }
     }
     let message = errorList.length ? errorList.join(",") + " 发生错误" : "没有发生错误"
-    log("定期更新cookie" + message, logLevels.info, true);
+    log("定期更新cookie " + message, logLevels.info, true);
     chrome.notifications.create(null, {
         type: "basic",
         iconUrl: "../icon/refresh.png",
