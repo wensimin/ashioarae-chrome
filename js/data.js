@@ -13,7 +13,7 @@ let logLevels = {
     debug: 3
 }
 // 当前日志级别
-let logLevel = logLevels.info;
+let logLevel = logLevels.debug;
 
 
 class Type {
@@ -86,9 +86,10 @@ let weiboType = new Type("weibo", "weibo.com", null, null,
         //获取第二次请求的url
         let url = res[0];
         //第二次请求
-        $.ajax(url, {
+        let endHtml = await $.ajax(url, {
             type: "get", global: false
-        })
+        });
+        log("weibo 302 html: " + endHtml, logLevels.info, true)
     });
 
 let typeList = [
