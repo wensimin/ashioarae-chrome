@@ -89,7 +89,7 @@ let weiboType = new Type("weibo", "weibo.com", null, null,
         let endHtml = await $.ajax(url, {
             type: "get", global: false
         });
-        log("weibo 302 html: " + endHtml, logLevels.info, true)
+        log("weibo 302 html", logLevels.info, true, endHtml)
     });
 
 let typeList = [
