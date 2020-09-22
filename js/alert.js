@@ -53,7 +53,7 @@ async function refreshCookie() {
         try {
             await t.refreshCookie();
         } catch (e) {
-            log("自动刷新cookie类型" + t.type + "出现错误  " + e.toLocaleString(), logLevels.error, true);
+            log("自动刷新cookie类型" + t.type + "出现错误  " + e.message, logLevels.error, true);
             errorList.push(t.domain);
         }
     }
