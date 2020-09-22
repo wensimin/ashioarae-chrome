@@ -44,17 +44,30 @@ function initAlert() {
  */
 async function refreshCookie() {
     let errorList = []
+
+    async function refreshCookieAndRetry(t, number) {
+        try {
+            await t.refreshCookie();
+        } catch (e) {
+            if (number >= 3) {
+                log("自动刷新cookie类型" + t.type + "出现错误  " + e.message, logLevels.error, true);
+                return t.domain
+            } else {
+                log(t.type + " retry " + (number + 1) + " 失败: " + e.message + " 进行重试", logLevels.error);
+                return refreshCookieAndRetry(t, number++);
+            }
+        }
+    }
+
     for (const t of typeList) {
         let config = await getConfig()
         let tarConfig = config.tarConfig;
         if (!tarConfig[t.type]) {
             continue;
         }
-        try {
-            await t.refreshCookie();
-        } catch (e) {
-            log("自动刷新cookie类型" + t.type + "出现错误  " + e.message, logLevels.error, true);
-            errorList.push(t.domain);
+        let err = await refreshCookieAndRetry(t, 0);
+        if (err) {
+            errorList.push(err);
         }
     }
     let message = errorList.length ? errorList.join(",") + " 发生错误" : "没有发生错误"
