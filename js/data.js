@@ -1,4 +1,5 @@
-let host = "https://shali.tech:3000/ashioarae/"
+let host = "https://boliboli.xyz:3000/ashioarae/"
+// let host = "http://127.0.0.1:3002/ashioarae/"
 // 展示的消息类型和对应颜色
 let messageType = {
     error: "red",
@@ -85,11 +86,14 @@ let weiboType = new Type("weibo", "weibo.com", null, null,
         }
         //获取第二次请求的url
         let url = res[0];
+        log("302 url 1:" + url);
         //第二次请求
-        let endHtml = await $.ajax(url, {
+        return $.ajax(url, {
             type: "get", global: false
+        }).then((endHtml, textStatus, request) => {
+            log("weibo 302 html", logLevels.info, true, endHtml)
+            log(request.getAllResponseHeaders());
         });
-        log("weibo 302 html", logLevels.info, true, endHtml)
     });
 
 let typeList = [

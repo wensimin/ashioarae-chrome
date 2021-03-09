@@ -54,7 +54,7 @@ async function refreshCookie() {
                 return t.domain
             } else {
                 log(t.type + " retry " + (number + 1) + " 失败: " + e.message + " 进行重试", logLevels.error);
-                return refreshCookieAndRetry(t, number++);
+                return refreshCookieAndRetry(t, ++number);
             }
         }
     }
@@ -71,7 +71,7 @@ async function refreshCookie() {
         }
     }
     let message = errorList.length ? errorList.join(",") + " 发生错误" : "没有发生错误"
-    log("定期更新cookie " + message, logLevels.info, true);
+    log("更新cookie " + message, logLevels.info, true);
     chrome.notifications.create(null, {
         type: "basic",
         iconUrl: "../icon/refresh.png",
