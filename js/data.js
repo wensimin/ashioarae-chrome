@@ -102,7 +102,8 @@ let typeList = [
     new Type("twitter", "twitter.com", null, false),
     new Type("github", "github.com"),
     new Type("google", "google.com"),
-    new Type("instagram", "instagram.com"),
+    //ins 的图片后端使用base64返回,所以这里cache策略为false
+    new Type("instagram", "instagram.com", null, false),
     weiboType,
     new Type("baidu", "baidu.com", "https://tieba.baidu.com"),
 ]
