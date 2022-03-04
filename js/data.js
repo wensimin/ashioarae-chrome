@@ -1,4 +1,4 @@
-let host = "https://boliboli.xyz:3000/ashioarae/"
+let host = "https://shali.fun:3000/ashioarae/"
 // let host = "http://127.0.0.1:3002/ashioarae/"
 // 展示的消息类型和对应颜色
 let messageType = {
