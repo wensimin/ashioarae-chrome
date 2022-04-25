@@ -1,5 +1,5 @@
 let host = "https://shali.fun:3000/ashioarae/"
-// let host = "http://127.0.0.1:3002/ashioarae/"
+//let host = "http://127.0.0.1:3002/ashioarae/"
 // 展示的消息类型和对应颜色
 let messageType = {
     error: "red",
@@ -105,5 +105,5 @@ let typeList = [
     //ins 的图片后端使用base64返回,所以这里cache策略为false
     new Type("instagram", "instagram.com", null, false),
     weiboType,
-    new Type("baidu", "baidu.com", "https://tieba.baidu.com"),
+    new Type("baidu", "baidu.com", "https://tieba.baidu.com/f/user/json_userinfo"),
 ]
